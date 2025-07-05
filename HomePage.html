@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home Page</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: "Segoe UI", sans-serif;
+        background: linear-gradient(135deg, #83a4d4, #b6fbff);
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: #fff;
+    }
+
+    h1 {
+        font-size: 40px;
+        margin-bottom: 30px;
+        text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+    }
+
+    .btn {
+        padding: 12px 20px;
+        margin: 10px 0;
+        font-size: 16px;
+        width: 220px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .start-btn {
+        background: #28a745;
+        color: white;
+        padding: 16px 24px;      
+        font-size: 20px;         
+        width: 275px;             
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .start-btn:hover {
+        background: #218838;
+    }
+
+    .edit-btn {
+        background: #007bff;
+        color: white;
+        padding: 12px 20px;
+        font-size: 16px;
+        width: 220px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .edit-btn:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to Trivial Compute</h1>
+  <button class="btn start-btn" onclick="startGame()">🎲 Start New Game</button>
+  <button class="btn edit-btn" onclick="editQuestions()">✏️ Edit Questions</button>
+
+  <script>
+    function startGame() {
+      alert("Game is starting...");
+      // Go to category Selection Page
+    }
+
+    function editQuestions() {
+      alert("Navigating to question editor...");
+      // Go to login page 
+      //or have pop up login then hndle that logic then send to edit pages 
+    }
+  </script>
+</body>
+</html>
