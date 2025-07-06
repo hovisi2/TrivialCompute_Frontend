@@ -38,58 +38,51 @@
         cursor: pointer;
         transition: background 0.3s;
         box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        color: white;
     }
 
-    .start-btn {
+    .startGame-btn {
         background: #28a745;
-        color: white;
+        
         padding: 16px 24px;      
         font-size: 20px;         
         width: 275px;             
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background 0.3s;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
-    .start-btn:hover {
+    .startGame-btn:hover {
         background: #218838;
     }
 
-    .edit-btn {
+    .editQuestions-btn {
         background: #007bff;
-        color: white;
-        padding: 12px 20px;
-        font-size: 16px;
-        width: 220px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background 0.3s;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
-    .edit-btn:hover {
+    .editQuestions-btn:hover {
       background: #0056b3;
     }
   </style>
 </head>
 <body>
   <h1>Welcome to Trivial Compute</h1>
-  <button class="btn start-btn" onclick="startGame()">🎲 Start New Game</button>
-  <button class="btn edit-btn" onclick="editQuestions()">✏️ Edit Questions</button>
+  <button class="btn startGame-btn" onclick="startGame()">🎲 Start New Game</button>
+  <button class="btn editQuestions-btn" onclick="editQuestions()">✏️ Edit Questions</button>
 
   <script>
     function startGame() {
-      alert("Game is starting...");
-      // Go to category Selection Page
+        alert("Game is starting...");
+        // Go to category Selection Page
     }
 
     function editQuestions() {
-      alert("Navigating to question editor...");
-      // Go to login page 
-      //or have pop up login then hndle that logic then send to edit pages 
+        // Go to login page 
+        //or have pop up login then hndle that logic then send to edit pages 
+        const password = prompt("Enter password to edit questions:");
+        if (password === "trivia123") {
+            window.location.href = "QuestionEditorSelection.html"; //edit this to the question editor page 
+            
+        } else {
+            alert("Incorrect password. Access denied.");
+        }
     }
   </script>
 </body>
