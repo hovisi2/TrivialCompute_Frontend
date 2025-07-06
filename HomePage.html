@@ -69,8 +69,7 @@
 
   <script>
     function startGame() {
-        alert("Game is starting...");
-        // Go to category Selection Page
+      window.location.href = "CategorySelection.html";
     }
 
     function editQuestions() {
@@ -78,7 +77,7 @@
         //or have pop up login then hndle that logic then send to edit pages 
         const password = prompt("Enter password to edit questions:");
         if (password === "trivia123") {
-            window.location.href = "QuestionEditorSelection.html"; //edit this to the question editor page 
+            window.location.href = "QuestionEditorSelection.html";
             
         } else {
             alert("Incorrect password. Access denied.");
