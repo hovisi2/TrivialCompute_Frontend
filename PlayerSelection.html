@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Player Selection</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      font-family: sans-serif;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      position: absolute;
+      top: 20px;
+      width: 100%;
+      text-align: center;
+      color: white;
+      font-size: 2em;
+      z-index: 10;
+      margin: 0;
+      pointer-events: none;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+    }
+    
+    label {
+      font-family: "Segoe UI", sans-serif;
+      margin-bottom: 10px;
+      font-size: 1em;
+      font-weight: bold;
+      color: black;
+      font-size: 20px;
+    }
+
+    input[type="text"] {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 300px;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    input::placeholder {
+        text-align: center;
+    }
+
+    .grid {
+      display: grid;
+      height: 100vh;
+      width: 100vw;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
+
+    .top-left,
+    .top-right,
+    .bottom-left,
+    .bottom-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .top-left { background-color: red; }
+    .top-right { background-color: green; }
+    .bottom-left { background-color: blue; }
+    .bottom-right { background-color: yellow; }
+
+    .startGame-button {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: black;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 10;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .startGame-button:hover {
+      background-color: gray;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>Please Enter Player's Names</h1>
+  <div class="grid">
+    <div class="top-left">
+      <label for="player-one">Player 1</label>
+      <input type="text" id="player-one" placeholder="Enter Player 1's Name">
+    </div>
+    <div class="top-right">
+      <label for="player-two">Player 2</label>
+      <input type="text" id="player-two" placeholder="Enter Player 2's Name">
+    </div>
+    <div class="bottom-left">
+      <label for="player-three">Player 3</label>
+      <input type="text" id="player-three" placeholder="Enter Player 3's Name">
+    </div>
+    <div class="bottom-right">
+      <button class="startGame-button" onclick="startGameClicked()">Start Game</button>
+      <label for="player-four">Player 4</label>
+      <input type="text" id="player-four" placeholder="Enter Player 4's Name">
+    </div>
+  </div>
+  
+  <script>
+    
+    //Start Game Button is clicked
+    async function startGameClicked() {
+        window.location.href = 'GameBoard.html';
+
+        // const playerData = {
+        // playerOne: document.getElementById('player-one').value,
+        // playerTwo: document.getElementById('player-two').value,
+        // playerThree: document.getElementById('player-three').value,
+        // playerFour: document.getElementById('player-four').value
+        // };
+
+        // try {
+        // const response = await fetch('/api/save-players', {
+        //     method: 'POST',
+        //     headers: {
+        //     'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(playerData)
+        // });
+
+        // if (response.ok) {
+        //     window.location.href = 'GameBoard.html';
+        // } else {
+        //     alert('Failed to save players. Try again!');
+        // }
+        // } catch (error) {
+        // console.error('Error saving players:', error);
+        // alert('Something went wrong. Please try again.');
+        // }
+    }
+    
+    /*
+    //backend code to handle save text 
+    // Node.js + Express
+    app.post('/api/save-players', async (req, res) => {
+     { playerOne, playerTwo, playerThree, playerFour } = req.body;
+
+    // TODO: Add validation or uniqueness checks
+
+    try {
+        await db.query(
+        'INSERT INTO players (name) VALUES (?), (?), (?), (?)',
+        [playerOne, playerTwo, playerThree, playerFour]
+        );
+        res.status(200).send('Players saved successfully!');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Database error');
+    }
+    });
+    
+    //DB Code
+    CREATE TABLE players (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+    */
+
+  </script>
+
+</body>
+</html>
