@@ -4,64 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Question Editor Selection</title>
-  <style>
-    * {
-        box-sizing: border-box;
-    }
-
-    body {
-        margin: 0;
-        font-family: "Segoe UI", sans-serif;
-        height: 100vh;
-        background: #f0f0f0;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .btn {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: white;
-        font-size: 30px;
-        border: none;
-        cursor: pointer;
-    }
-
-    .createNewQuestion-btn {
-        background: #28a745;
-    }
-    
-    .createNewQuestion-btn:hover {
-        background: #218838;
-    }
-
-    .editExistingQuestion-btn {
-        background: #007bff;
-    }
-
-    .editExistingQuestion-btn:hover {
-        background: #0056b3;
-    }
-  </style>
+  <link rel="stylesheet" href="questionEditorSelection.css" />
 </head>
-
 <body>
-    <button class="btn createNewQuestion-btn" onclick="createNewQuestion()"> Make a New Question </button>
-    <button class="btn editExistingQuestion-btn" onclick="editExistingQuestion()"> Edit an Existing Questions</button>
+  <button class="btn createNewQuestion-btn" onclick="createNewQuestion()">Make a New Question</button>
+  <button class="btn editExistingQuestion-btn" onclick="editExistingQuestion()">Edit an Existing Question</button>
 
-
-  <script>
-    function createNewQuestion() {
-       
-    }
-
-    function editExistingQuestion() {
-        
-    }
-  </script>
-
-
+  <script src="questionEditorSelection.js"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 // Called when the Next button is clicked
 function nextButtonClicked() {
     // Validate that all dropdowns are selected here
-    window.location.href = "playerSelection.html";
+    window.location.href = "../PlayerSelection/playerSelection.html";
   }
   
   // Fetch categories from endpoint and populate select dropdown
