@@ -1,6 +1,6 @@
  //Start Game Button is clicked
  async function startGameClicked() {
-    window.location.href = '../GameBoard/gameBoard.html';
+    window.location.href = '../GameBoard/gameBoard.html'; 
 
     // const playerData = {
     // playerOne: document.getElementById('player-one').value,

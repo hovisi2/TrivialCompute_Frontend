@@ -1,8 +1,8 @@
 function createNewQuestion() {
-    window.location.href = ""; //add page to redirect here
+    window.location.href = "../MakeNewQuestion/makeNewQuestion.html"; 
   }
   
   function editExistingQuestion() {
-    window.location.href = ""; //add page to redirect here
+    window.location.href = "../EditExistingQuestion/editExistingQuestion.html"; 
   }
   
