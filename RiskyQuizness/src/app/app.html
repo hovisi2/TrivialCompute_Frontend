@@ -1,5 +1,14 @@
 <div style="margin:100px">
+  <h4>Category</h4>
+  <input type="text" [(ngModel)]="newCategory">
+  <h4>Question</h4>
+  <input type="text" [(ngModel)]="newQuestion">
+  <h4>Answer</h4>
+  <input type="text" [(ngModel)]="newAnswer">
+  <button (click)="add_question()">Submit</button>
 	<p *ngFor="let item of tasks">
-		&diams;{{item.text}}
+		 &diams; Category {{item.category}}
+    		Question {{item.question}}
+    		Answer {{item.answer}}
 	</p>
 </div>
