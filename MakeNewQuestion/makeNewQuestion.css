@@ -1,0 +1,97 @@
+ body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background:#28a745;;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    padding-top: 100px;
+  }
+
+  label {
+    font-family: "Segoe UI", sans-serif;
+    margin-bottom: 12px;
+    font-size: 30px;
+    font-weight: bold;
+    color: black;
+    text-align: center;
+  }
+  
+  .textbox-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .horizontal-inputs {
+    display: flex;
+    gap: 200px;
+    justify-content: center;
+    padding-top: 50px;
+  }
+  
+  .input-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .category-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+
+  input[type="text"] {
+    padding: 14px 18px;
+    font-size: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 450px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  input::placeholder {
+    text-align: center;
+  }
+  
+  .btn {
+    padding: 16px 24px;
+    margin: 10px 0;
+    font-size: 18px;
+    width: 260px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    color: white;
+    background: #007bff;
+  }
+
+  .btn:hover {
+    background: #0056b3;
+  }
+
+  .addQuestion-btn {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 65px
+  }
+  
+  .home-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 100px;
+  }
+  
