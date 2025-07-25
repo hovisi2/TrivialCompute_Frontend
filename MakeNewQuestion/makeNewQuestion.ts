@@ -5,7 +5,7 @@ function handleAddQuestion() {
     //else handle error
   }
 
-  function handleHome() {
+  function handleHome(): void {
     window.location.href = "../HomePage/homePage.html";
   }
   
