@@ -1,14 +1,57 @@
-<div style="margin:100px">
-  <h4>Category</h4>
-  <input type="text" [(ngModel)]="newCategory">
-  <h4>Question</h4>
-  <input type="text" [(ngModel)]="newQuestion">
-  <h4>Answer</h4>
-  <input type="text" [(ngModel)]="newAnswer">
-  <button (click)="add_question()">Submit</button>
-	<p *ngFor="let item of tasks">
-		 &diams; Category {{item.category}}
-    		Question {{item.question}}
-    		Answer {{item.answer}}
-	</p>
+<div *ngIf="homepage" class="homepage">
+    <h1>Welcome to Trivial Compute</h1>
+    <button class="btn startGame-btn" (click)="startGame()">🎲 Start New Game</button>
+    <button class="btn editQuestions-btn" onclick="editQuestions()">✏️ Edit Questions</button>
 </div>
+
+<div *ngIf="playerselection" class="PlayerSelection">
+	<h1>Please Enter Player's Names</h1>
+  <div class="grid">
+    <div class="top-left">
+      <label for="player-one">Player 1</label>
+      <input type="text" id="player-one" placeholder="Enter Player 1's Name">
+    </div>
+    <div class="top-right">
+      <label for="player-two">Player 2</label>
+      <input type="text" id="player-two" placeholder="Enter Player 2's Name">
+    </div>
+    <div class="bottom-left">
+      <label for="player-three">Player 3</label>
+      <input type="text" id="player-three" placeholder="Enter Player 3's Name">
+    </div>
+    <div class="bottom-right">
+      <button class="startGame-button" (click)="startGameClicked()">Start Game</button>
+      <label for="player-four">Player 4</label>
+      <input type="text" id="player-four" placeholder="Enter Player 4's Name">
+    </div>
+  </div>
+</div>
+
+<div *ngIf="categoryselection" class="CategorySelection">
+	  <h1>Select Four Categories</h1>
+  <div class="grid">
+    <div class="top-left">
+      <label for="category-one">Category 1</label>
+      <select id="category-one"></select>
+    </div>
+    <div class="top-right">
+      <label for="category-two">Category 2</label>
+      <select id="category-two"></select>
+    </div>
+    <div class="bottom-left">
+      <label for="category-three">Category 3</label>
+      <select id="category-three"></select>
+    </div>
+    <div class="bottom-right">
+      <button class="next-button" (click)="nextButtonClicked()">Next</button>
+      <label for="category-four">Category 4</label>
+      <select id="category-four"></select>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="gameboard" class="GameBoard">
+	 <canvas #gameCanvas ></canvas>
+</div>
+
+
