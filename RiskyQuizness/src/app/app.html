@@ -1,11 +1,11 @@
 <div *ngIf="homepage" class="homepage">
-    <h1>Welcome to Trivial Compute</h1>
-    <button class="btn startGame-btn" (click)="startGame()">🎲 Start New Game</button>
-    <button class="btn editQuestions-btn" onclick="editQuestions()">✏️ Edit Questions</button>
+  <h1>Welcome to Trivial Compute</h1>
+  <button class="btn startGame-btn" (click)="startGame()">🎲 Start New Game</button>
+  <button class="btn editQuestions-btn" (click)="editQuestions()">✏️ Edit Questions</button>
 </div>
 
 <div *ngIf="playerselection" class="PlayerSelection">
-	<h1>Please Enter Player's Names</h1>
+  <h1>Please Enter Player's Names</h1>
   <div class="grid">
     <div class="top-left">
       <label for="player-one">Player 1</label>
@@ -28,30 +28,170 @@
 </div>
 
 <div *ngIf="categoryselection" class="CategorySelection">
-	  <h1>Select Four Categories</h1>
+  <h1>Select Four Categories</h1>
   <div class="grid">
     <div class="top-left">
       <label for="category-one">Category 1</label>
-      <select id="category-one"></select>
+      <select id="category-one">
+        <option value="">Select Category</option>
+        <option *ngFor="let category of CATEGORIES" [value]="category">{{category}}</option>
+      </select>
     </div>
     <div class="top-right">
       <label for="category-two">Category 2</label>
-      <select id="category-two"></select>
+      <select id="category-two">
+        <option value="">Select Category</option>
+        <option *ngFor="let category of CATEGORIES" [value]="category">{{category}}</option>
+      </select>
     </div>
     <div class="bottom-left">
       <label for="category-three">Category 3</label>
-      <select id="category-three"></select>
+      <select id="category-three">
+        <option value="">Select Category</option>
+        <option *ngFor="let category of CATEGORIES" [value]="category">{{category}}</option>
+      </select>
     </div>
     <div class="bottom-right">
       <button class="next-button" (click)="nextButtonClicked()">Next</button>
       <label for="category-four">Category 4</label>
-      <select id="category-four"></select>
+      <select id="category-four">
+        <option value="">Select Category</option>
+        <option *ngFor="let category of CATEGORIES" [value]="category">{{category}}</option>
+      </select>
     </div>
   </div>
 </div>
 
 <div *ngIf="gameboard" class="GameBoard">
-	 <canvas #gameCanvas ></canvas>
+  <div class="game-controls">
+    <div class="current-player">
+      <h2>{{getCurrentPlayerName()}}'s Turn</h2>
+      <p>{{getGamePhaseText()}}</p>
+      <button *ngIf="gameState.gamePhase === 'rolling'" (click)="onRollDice()" class="roll-dice-btn">
+        🎲 Roll Dice
+      </button>
+      <div *ngIf="gameState.rollValue > 0" class="dice-result">
+        Rolled: {{gameState.rollValue}}
+      </div>
+      <div *ngIf="gameState.gamePhase === 'moving'" class="move-instruction">
+        Click on a highlighted space to move
+      </div>
+    </div>
+
+    <div class="player-status">
+      <h3>Players</h3>
+      <div *ngFor="let player of players; let i = index" class="player-info" [style.border-color]="player.color"
+        [class.current-player-highlight]="i === gameState.currentPlayer">
+        <div class="player-name">{{player.name}}</div>
+        <div class="player-chips">
+          Chips:
+          <span *ngFor="let chip of player.chips" class="chip" [style.background-color]="getCategoryColor(chip)">
+            {{chip[0]}}
+          </span>
+          <span *ngIf="player.chips.length === 0">None</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <canvas #gameCanvas class="game-canvas"></canvas>
 </div>
 
+<div *ngIf="questionmanagement" class="QuestionManagement">
+  <div class="management-header">
+    <h1>Question Management</h1>
+    <button class="btn back-btn" (click)="backToHomepage()">← Back to Home</button>
+  </div>
 
+  <div *ngIf="!authenticated" class="auth-section">
+    <h2>Enter Editorial Credentials</h2>
+    <div class="auth-form">
+      <label for="auth-username">Username:</label>
+      <input type="text" id="auth-username" [(ngModel)]="authUsername" placeholder="Enter username">
+      <label for="auth-password">Password:</label>
+      <input type="password" id="auth-password" [(ngModel)]="authPassword" placeholder="Enter password">
+      <button class="btn auth-btn" (click)="authenticate()">Login</button>
+      <p class="auth-hint">use 'admin' / 'password' for now</p>
+    </div>
+  </div>
+
+  <div *ngIf="authenticated && !editingQuestion && !creatingQuestion" class="editor-selection">
+    <h2>Question Prompt Maker Editor</h2>
+    <div class="editor-options">
+      <button class="btn create-btn" (click)="startCreateQuestion()">📝 Make New Question</button>
+      <button class="btn edit-btn" (click)="showQuestionList()">✏️ Edit Existing Questions</button>
+    </div>
+
+    <div *ngIf="showingQuestionList" class="questions-list">
+      <h3>Select Question to Edit</h3>
+      <div *ngIf="allQuestions.length === 0" class="no-questions">
+        <p>No questions found in the database.</p>
+        <div class="empty-db-actions">
+          <button class="btn create-btn" (click)="startCreateQuestion()">📝 Create Your First Question</button>
+          <button class="btn save-btn" (click)="addSampleQuestions()">🎯 Add Sample Questions</button>
+        </div>
+      </div>
+      <div *ngIf="allQuestions.length > 0">
+        <div class="question-item" *ngFor="let question of allQuestions" (click)="startEditQuestion(question)">
+          <div class="question-preview">
+            <strong>{{question.category}}</strong>: {{question.question | slice:0:50}}...
+          </div>
+          <button class="btn small-btn edit-btn">Edit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="creatingQuestion" class="question-form">
+    <h2>Make New Question</h2>
+    <form (ngSubmit)="saveNewQuestion()">
+      <div class="form-group">
+        <label for="new-category">Category:</label>
+        <select id="new-category" [(ngModel)]="newQuestionData.category" name="category" required>
+          <option value="">Select Category</option>
+          <option *ngFor="let category of CATEGORIES" [value]="category">{{category}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="new-question-text">Question:</label>
+        <textarea id="new-question-text" [(ngModel)]="newQuestionData.question" name="question" required
+          rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="new-answer">Answer:</label>
+        <input type="text" id="new-answer" [(ngModel)]="newQuestionData.answer" name="answer" required>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn save-btn">💾 Save Question</button>
+        <button type="button" class="btn cancel-btn" (click)="cancelCreate()">❌ Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="editingQuestion" class="question-form">
+    <h2>Question Editor</h2>
+    <form (ngSubmit)="saveEditedQuestion()">
+      <div class="form-group">
+        <label for="edit-category">Category:</label>
+        <select id="edit-category" [(ngModel)]="editQuestionData.category" name="category" required>
+          <option value="">Select Category</option>
+          <option *ngFor="let category of CATEGORIES" [value]="category">{{category}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="edit-question-text">Question:</label>
+        <textarea id="edit-question-text" [(ngModel)]="editQuestionData.question" name="question" required
+          rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="edit-answer">Answer:</label>
+        <input type="text" id="edit-answer" [(ngModel)]="editQuestionData.answer" name="answer" required>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn save-btn">💾 Update Question</button>
+        <button type="button" class="btn delete-btn" (click)="deleteCurrentQuestion()">🗑️ Delete Question</button>
+        <button type="button" class="btn cancel-btn" (click)="cancelEdit()">❌ Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
