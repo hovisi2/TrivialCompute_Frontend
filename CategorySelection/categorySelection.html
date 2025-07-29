@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Category Selection</title>
+  <link rel="stylesheet" href="categorySelection.css" />
+</head>
+<body>
+  <h1>Select Four Categories</h1>
+  <div class="grid">
+    <div class="top-left">
+      <label for="category-one">Category 1</label>
+      <select id="category-one"></select>
+    </div>
+    <div class="top-right">
+      <label for="category-two">Category 2</label>
+      <select id="category-two"></select>
+    </div>
+    <div class="bottom-left">
+      <label for="category-three">Category 3</label>
+      <select id="category-three"></select>
+    </div>
+    <div class="bottom-right">
+      <button class="next-button" onclick="nextButtonClicked()">Next</button>
+      <label for="category-four">Category 4</label>
+      <select id="category-four"></select>
+    </div>
+  </div>
+
+  <script src="categorySelection.js"></script>
+</body>
+</html>

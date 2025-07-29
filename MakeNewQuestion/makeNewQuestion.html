@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simple Form</title>
+  <link rel="stylesheet" href="makeNewQuestion.css" />
+</head>
+<body>
+  <div class="textbox-group">
+    <div class="category-container">
+        <label for="categorytextbox">Category Name</label>
+        <input type="text" placeholder="Category" />
+    </div>
+    
+
+    <div class="horizontal-inputs">
+        <div class="input-block">
+            <label for="questiontextbox">Question</label>
+            <input type="text" id="questiontextbox" placeholder="Question" />
+        </div>
+          
+          
+        
+        <div class="input-block">
+            <label for="answertextbox">Answer</label>
+            <input type="text" placeholder="Answer" />
+        </div>
+        
+    </div>
+  </div>
+
+  <button class="btn addQuestion-btn" onclick="handleAddQuestion()">Add Question</button>
+  <button class="btn home-btn" onclick="handleHome()">Home</button>
+
+  <script src="makeNewQuestion.js"></script>
+</body>
+</html>
