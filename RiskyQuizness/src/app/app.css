@@ -82,7 +82,7 @@
     margin-bottom: 10px;
     font-size: 20px;
     font-weight: bold;
-    color: black;
+    color: #fff;
   }
   
   .CategorySelection select {
@@ -169,7 +169,7 @@
     margin-bottom: 10px;
     font-size: 20px;
     font-weight: bold;
-    color: black;
+    color: #fff;
   }
   
   .PlayerSelection input[type="text"] {
@@ -233,7 +233,7 @@
   .GameBoard body {
     margin: 0;
     padding: 20px;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Segoe UI', sans-serif;
     background-color: #f4f4f4;
     display: flex;
     flex-direction: column;
@@ -386,8 +386,26 @@
 
 
   /* Question Editor Selection */
-  .editor-selection * {
+  
+   .editor-selection * {
     box-sizing: border-box;
+  }
+  
+  .editor-selection {
+    padding: 30px;
+    max-width: flex;
+    max-height: flex;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #83a4d4, #b6fbff);
+    font-family: "Segoe UI", sans-serif;
+    min-height: 90vh;
+    color: #fff;
+  }
+
+  .editor-selection h2 {
+    font-size: 40px;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
   }
   
   .editor-selection body {
@@ -410,23 +428,50 @@
     cursor: pointer;
   }
   
-  .editor-selection .createNewQuestion-btn {
+  .editor-selection .create-btn {
     background: #28a745;
   }
   
-  .editor-selection .createNewQuestion-btn:hover {
+  .editor-selection .create-btn:hover {
     background: #218838;
   }
   
-  .editor-selection .editExistingQuestion-btn {
+  .editor-selection .edit-btn {
     background: #007bff;
   }
   
-  .editor-selection .editExistingQuestion-btn:hover {
+  .editor-selection .edit-btn:hover {
     background: #0056b3;
   }
 
+  .editor-selection h3 {
+    font-size: 40px;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+  }
 
+  .questions-list p {
+    font-size: 20px;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+  }
+
+  .questions-list .create-btn{
+    background: #28a745;
+  }
+
+  .questions-list .create-btn:hover {
+    background: #218838;
+  }
+
+  .questions-list .save-btn{
+    background: #007bff;
+  }
+
+  .questions-list .edit-btn:hover{
+    background: #0056b3;
+  }
+  
 /* Make New Question  */
 
 .question-form body {
@@ -448,8 +493,9 @@
   margin-bottom: 12px;
   font-size: 30px;
   font-weight: bold;
-  color: black;
+  color: #fff;
   text-align: center;
+  margin: 30;
 }
 
 .question-form .textbox-group {
@@ -507,9 +553,6 @@
   background: #007bff;
 }
 
-.question-form .btn:hover {
-  background: #0056b3;
-}
 
 .question-form .addQuestion-btn {
   position: absolute;
@@ -531,7 +574,7 @@
 
 /* Edit Question Actual Edit */
 .question-form .save-btn {
-  background: #27ae60;
+  background: #28a745;
   color: white;
 }
 
@@ -541,9 +584,25 @@
 }
 
 .question-form .cancel-btn {
+  background:#6c757dbd;
+  color: white;
+}
+
+.question-form .save-btn:hover {
+  background: #218838;
+  color: white;
+}
+
+.question-form .delete-btn:hover {
+  background: rgba(180, 53, 39, 0.801);
+  color: white;
+}
+
+.question-form .cancel-btn:hover{
   background: #6c757d;
   color: white;
 }
+
 
 
 /*  Question Prompt */
@@ -619,8 +678,21 @@ button {
   margin: 0 auto;
   background: linear-gradient(135deg, #83a4d4, #b6fbff);
   font-family: "Segoe UI", sans-serif;
-  min-height: 90vh
+  min-height: 90vh;
+  color: #fff;
 }
+/* .HomePage {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #83a4d4, #b6fbff);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #fff;
+} */
 
 .QuestionManagement .management-header {
   display: flex;
@@ -629,6 +701,12 @@ button {
   margin-bottom: 30px;
   padding-bottom: 15px;
   border-bottom: 2px solid #dee2e6;
+}
+
+.QuestionManagement h1 {
+  font-size: 40px;
+  margin-bottom: 30px;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
 }
 
 .QuestionManagement .back-btn {
@@ -643,6 +721,7 @@ button {
   border-radius: 8px;
   padding: 30px;
   margin: 20px 0;
+  color: rgb(0, 0, 0);
 }
 
 .QuestionManagement .auth-form {
@@ -681,3 +760,4 @@ button {
 
 
 /* BELLA NEED TO FIX GAME BOARD and Home Page and Questions */
+

@@ -426,7 +426,29 @@ export class App implements AfterViewInit {
     this.updateGameDisplay();
   }
 
-  askQuestion(category: string): void {
+askQuestion(category: string): void {
+    console.log(`Ask question for category: ${category}`);
+
+    // get random question from api
+    this.getRandomQuestion(category).subscribe({
+      next: (question: any) => {
+        this.currentQuestion = question;
+        console.log('Question fetched:', question);
+        // this is just simulating user answer, change for final
+        setTimeout(() => {
+          const correct = Math.random() > 0.5;
+          this.handleAnswer(correct);
+        }, 1500);
+      },
+      error: (error) => {
+        console.error('Error fetching question:', error);
+        this.handleAnswer(false);
+      }
+    });
+  }
+
+
+/*  askQuestion(category: string): void {
     // Try to get question from backend first, fallback to samples
     this.http.get<any>(this.APIURL + `api/questions/random/${category}`).subscribe({
       next: (question) => {
@@ -448,8 +470,7 @@ export class App implements AfterViewInit {
       }
     });
   }
-
-/*  private focusAnswerInput(): void {
+  private focusAnswerInput(): void {
     // Focus input after modal appears
     setTimeout(() => {
       const input = document.querySelector('.answer-input') as HTMLInputElement;
