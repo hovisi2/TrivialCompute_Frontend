@@ -14,6 +14,7 @@ interface BoardSpace {
     y: number;
   };
   isWedge: boolean;
+  isRollAgain: boolean;
 }
 
 interface Player {
@@ -52,10 +53,14 @@ export class App implements AfterViewInit {
   categoryselection = false;
   gameboard = false;
   questionmanagement = false;
+  questionprompt = false;
   CATEGORIES: string[] = ['Science', 'Math', 'English', 'History'];
   GRID_SIZE = 9;
   SPACING = 50;
+  questionText = "";
+  answer = "";
   boardSpaces: BoardSpace[] = [];
+  isRevealed = false;
 
   // create game state
   players: Player[] = [];
@@ -145,20 +150,19 @@ export class App implements AfterViewInit {
 
   startGame(): void {
     this.homepage = false
-    this.playerselection = true
+    this.categoryselection  = true //bella
+  }
+
+  nextButtonClicked() {
+    this.saveSelectedCategories();
+    this.categoryselection = false;
+    this.playerselection = true;
   }
 
   startGameClicked() {
-    // init players
     this.initializePlayers();
-    this.playerselection = false
-    this.categoryselection = true
-  }
-  nextButtonClicked() {
-    // capture selected categories
-    this.saveSelectedCategories();
-    this.categoryselection = false
-    this.gameboard = true
+    this.playerselection = false;
+    this.gameboard = true;
 
     setTimeout(() => {
       const canvas = this.canvas.nativeElement;
@@ -167,22 +171,59 @@ export class App implements AfterViewInit {
     });
   }
 
-
   createSquareBoard(): void {
     const half: number = Math.floor(this.GRID_SIZE / 2);
     let index: number = 0;
 
-    for (let x = 0; x < this.GRID_SIZE; x++) this.addBoardSpace(x, 0, index++);
-    for (let y = 1; y < this.GRID_SIZE; y++) this.addBoardSpace(this.GRID_SIZE - 1, y, index++);
-    for (let x = this.GRID_SIZE - 2; x >= 0; x--) this.addBoardSpace(x, this.GRID_SIZE - 1, index++);
-    for (let y = this.GRID_SIZE - 2; y > 0; y--) this.addBoardSpace(0, y, index++);
+    for (let x = 0; x < this.GRID_SIZE; x++) {
+	    if(this.boardSpaces.length == 0 || this.boardSpaces.length == 8 || this.boardSpaces.length == 16 || this.boardSpaces.length == 24){
+	    	this.addBoardSpace(x, 0, index);
+	    }
+	    else{
+		this.addBoardSpace(x, 0, index++);
+	    }
+    }
+    for (let y = 1; y < this.GRID_SIZE; y++){
+	    if(this.boardSpaces.length == 0 || this.boardSpaces.length == 8 || this.boardSpaces.length == 16 || this.boardSpaces.length == 24){
+	    	this.addBoardSpace(this.GRID_SIZE - 1, y, index);
+	    }
+	    else{
+		this.addBoardSpace(this.GRID_SIZE - 1, y, index++);
+	    }
+    }
+    for (let x = this.GRID_SIZE - 2; x >= 0; x--){
+	    if(this.boardSpaces.length == 0 || this.boardSpaces.length == 8 || this.boardSpaces.length == 16 || this.boardSpaces.length == 24){
+	    	this.addBoardSpace(x, this.GRID_SIZE - 1, index);
+	    }
+	    else{
+		this.addBoardSpace(x, this.GRID_SIZE - 1, index++);
+	    }	
+    }
+    for (let y = this.GRID_SIZE - 2; y > 0; y--){
+	    if(this.boardSpaces.length == 0 || this.boardSpaces.length == 8 || this.boardSpaces.length == 16 || this.boardSpaces.length == 24){
+	      this.addBoardSpace(0, y, index);
+	    }
+	    else{
+	      this.addBoardSpace(0, y, index++);
+	    }
+    }
 
     for (let y = 1; y < this.GRID_SIZE - 1; y++) {
-      if (y !== half) this.addBoardSpace(half, y, index++);
+	if(index == 0 || index == 8 || index == 16 || index == 24){
+	     if (y !== half) this.addBoardSpace(half, y, index);
+	}
+	else{
+	     if (y !== half) this.addBoardSpace(half, y, index++);
+	}
     }
 
     for (let x = 1; x < this.GRID_SIZE - 1; x++) {
-      if (x !== half) this.addBoardSpace(x, half, index++);
+	if(index == 0 || index == 8 || index == 16 || index == 24){	    
+      		if (x !== half) this.addBoardSpace(x, half, index);
+	}
+	else{
+		if (x !== half) this.addBoardSpace(x, half, index++);
+	}
     }
 
     this.addBoardSpace(half, half, index++, true);
@@ -196,49 +237,80 @@ export class App implements AfterViewInit {
   ): void {
     const x: number = gridX * this.SPACING + this.SPACING;
     const y: number = gridY * this.SPACING + this.SPACING;
-    const category: string = this.CATEGORIES[index % this.CATEGORIES.length];
-    const isWedge: boolean =
-      forceWedge || index % Math.floor((this.CATEGORIES.length * 4) / this.CATEGORIES.length) === 0;
-
+    const category: string = this.selectedCategories[index % this.selectedCategories.length];
+    let isWedge = false
+    let isRollAgain = false
+    if(this.boardSpaces.length == 0 || this.boardSpaces.length == 8 || this.boardSpaces.length == 16 || this.boardSpaces.length == 24){
+         isRollAgain = true
+	 
+    }
+    if(this.boardSpaces.length == 4 || this.boardSpaces.length == 12 || this.boardSpaces.length == 20 || this.boardSpaces.length == 28){
+	 isWedge = true
+    }
     this.boardSpaces.push({
       index,
       category,
       position: { x, y },
-      isWedge
+      isWedge,
+      isRollAgain
     });
   }
 
-  drawBoard(ctx: CanvasRenderingContext2D): void {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-    this.boardSpaces.forEach((space: BoardSpace) => {
+   drawBoard(ctx: CanvasRenderingContext2D): void {
+	   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    this.boardSpaces.forEach((space: BoardSpace, index: number) => {
       ctx.beginPath();
       ctx.rect(space.position.x - 20, space.position.y - 20, 40, 40);
-      ctx.fillStyle = this.getCategoryColor(space.category);
-      ctx.fill();
+    
+      // White background for last space
+      if (index === this.boardSpaces.length - 1) {
+        ctx.fillStyle = 'pink';
+      }//Roll Again 
+      else if(index === 0 || index === 8 || index === 16 || index === 24) {
+        ctx.fillStyle = '#f8e912';
+      } else {
+        ctx.fillStyle = this.getCategoryColor(space.category);
+      }
 
+      ctx.fill();
+    
       if (space.isWedge) {
         ctx.lineWidth = 3;
         ctx.strokeStyle = 'black';
         ctx.stroke();
       }
-
-      ctx.fillStyle = '#fff';
+    
+      
+      ctx.fillStyle = '#000'; // Use black text for better contrast on white
       ctx.font = '10px Arial';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(space.category[0], space.position.x, space.position.y);
+    
+      if (index === this.boardSpaces.length - 1) {
+        // Multi-line text: "Trivial" on top, "Compute" below
+        ctx.fillText('Trivial', space.position.x, space.position.y - 6);
+        ctx.fillText('Compute', space.position.x, space.position.y + 6);
+      } 
+      else if(index === 0 || index === 8 || index === 16 || index === 24){
+        ctx.fillText('Roll', space.position.x, space.position.y - 6);
+        ctx.fillText('Again', space.position.x, space.position.y + 6);
+      }else {
+        ctx.fillText(space.category[0], space.position.x, space.position.y);
+      }
+      
     });
   }
 
   getCategoryColor(category: string): string {
     const colors: Record<string, string> = {
-      History: '#c0392b',
-      Science: '#16a085',
-      Sports: '#2980b9',
-      Entertainment: '#f39c12',
-      Geography: '#27ae60',
-      Art: '#8e44ad'
+      History: '#47b9e6',
+      Science: '#4ce647',
+      Sports: '#f39c12',
+      Entertainment: '#e295dc',
+      Geography: '#2d7531',
+      Art: '#af214c',
+      Math: '#e74c3c',
+      English:'#ab5ef3',
     };
     return colors[category] || '#bdc3c7';
   }
@@ -344,7 +416,12 @@ export class App implements AfterViewInit {
     this.gameState.gamePhase = 'answering';
 
     const space = this.boardSpaces[targetPosition];
+    if(targetPosition == 0 || targetPosition == 8 || targetPosition == 16 || targetPosition == 24){
+	 this.gameState.gamePhase = 'rolling'; 
+    }
+    else{
     this.askQuestion(space.category);
+    }
 
     this.updateGameDisplay();
   }
@@ -354,8 +431,9 @@ export class App implements AfterViewInit {
     this.http.get<any>(this.APIURL + `api/questions/random/${category}`).subscribe({
       next: (question) => {
         this.currentQuestion = question;
-        this.playerAnswer = '';
-        this.focusAnswerInput();
+	this.showQuestion(this.currentQuestion)
+        console.log('Question fetched:', question);
+        // this is just simulating user answer, change for final
       },
       error: (error) => {
         console.warn('Could not load question from backend, using sample:', error);
@@ -371,7 +449,7 @@ export class App implements AfterViewInit {
     });
   }
 
-  private focusAnswerInput(): void {
+/*  private focusAnswerInput(): void {
     // Focus input after modal appears
     setTimeout(() => {
       const input = document.querySelector('.answer-input') as HTMLInputElement;
@@ -381,7 +459,7 @@ export class App implements AfterViewInit {
 
   private getSampleQuestion(category: string): string {
     const questions: Record<string, string> = {
-      'Science': 'What is the chemical symbol for gold?',
+'Science': 'What is the chemical symbol for gold?',
       'Math': 'What is 12 × 8?',
       'English': 'Who wrote "Romeo and Juliet"?',
       'History': 'In what year did World War II end?'
@@ -398,8 +476,20 @@ export class App implements AfterViewInit {
     };
     return answers[category] || 'Paris';
   }
+*/
+  showQuestion (question: any): void {
+     this.questionprompt = true;
+     this.questionText = question.question;
+     this.answer = question.answer;
+  }     
 
+ revealAnswer() {
+    this.isRevealed = true;
+  }
+    	  
   handleAnswer(correct: boolean): void {
+    this.questionprompt = false; 
+    this.isRevealed = false; 
     const currentPlayer = this.players[this.gameState.currentPlayer];
     const currentSpace = this.boardSpaces[currentPlayer.position];
     const centerSpaceIndex = this.boardSpaces.length - 1;

@@ -27,6 +27,23 @@
   </div>
 </div>
 
+<div class="overlay" *ngIf="questionprompt">
+  <div class="flashcard" (click)="$event.stopPropagation()">
+    <div class="question" (click)="revealAnswer()">
+      {{ questionText }}
+    </div>
+
+    <div class="answer" *ngIf="isRevealed">
+      {{ answer }}
+    </div>
+
+    <div class="buttons" *ngIf="isRevealed">
+      <button class="correct" (click)="handleAnswer(true)">Correct</button>
+      <button class="incorrect" (click)="handleAnswer(false)">Incorrect</button>
+    </div>
+  </div>
+</div>
+
 <div *ngIf="categoryselection" class="CategorySelection">
   <h1>Select Four Categories</h1>
   <div class="grid">

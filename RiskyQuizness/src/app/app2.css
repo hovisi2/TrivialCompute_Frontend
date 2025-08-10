@@ -3,6 +3,19 @@
     box-sizing: border-box;
   }
 
+  /* .homepage body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background: linear-gradient(135deg, #83a4d4, #b6fbff);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+  } */
+
   .homepage {
     margin: 0;
     font-family: "Segoe UI", sans-serif;
@@ -547,6 +560,7 @@
 
 
 /*  Question Prompt */
+
 /* Fullscreen overlay */
 .overlay {
   position: fixed;
@@ -606,20 +620,21 @@ button {
 }
 
 
-/* Password Authentication */
-.QuestionManagement html, body {
-  height: 100%;
-  margin: 0;
-}
 
+
+
+
+
+
+
+/* Password Authentication */
 .QuestionManagement {
   padding: 30px;
   max-width: flex;
-  max-height: flex;
+  height: flex; 
   margin: 0 auto;
   background: linear-gradient(135deg, #83a4d4, #b6fbff);
   font-family: "Segoe UI", sans-serif;
-  min-height: 90vh
 }
 
 .QuestionManagement .management-header {
@@ -677,7 +692,4 @@ button {
   color: #7f8c8d;
   font-style: italic;
 }
-
-
-
 /* BELLA NEED TO FIX GAME BOARD and Home Page and Questions */
