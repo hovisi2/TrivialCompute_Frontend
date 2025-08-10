@@ -46,7 +46,7 @@ export class App implements AfterViewInit {
   newCategory = "";
   newQuestion = "";
   newAnswer = "";
-  APIURL = "http://3.150.30.122/";
+  APIURL = "http://localhost:8000/";
   homepage = true;
   playerselection = false;
   categoryselection = false;
@@ -71,6 +71,7 @@ export class App implements AfterViewInit {
 
   selectedCategories: string[] = [];
   currentQuestion: any = null;
+  playerAnswer: string = '';
 
   // question management state
   authenticated = false;
@@ -94,6 +95,7 @@ export class App implements AfterViewInit {
 
   ngOnInit() {
     this.get_tasks();
+    this.loadAvailableCategories();
   }
   get_tasks() {
     this.http.get(this.APIURL + "get_data").subscribe((res) => {
@@ -327,21 +329,12 @@ export class App implements AfterViewInit {
     const currentPosition = currentPlayer.position;
     const rollValue = this.gameState.rollValue;
 
-    const moves: number[] = [];
-
     const forwardMove = (currentPosition + rollValue) % this.boardSpaces.length;
-    moves.push(forwardMove);
-
-    const backwardMove = (currentPosition - rollValue + this.boardSpaces.length) % this.boardSpaces.length;
-    if (backwardMove !== forwardMove) {
-      moves.push(backwardMove);
-    }
-
-    this.gameState.possibleMoves = moves;
+    this.gameState.possibleMoves = [forwardMove];
   }
 
   playerMoveSpace(targetPosition: number): void {
-    if (!this.gameState.possibleMoves.includes(targetPosition)) {
+    if (this.gameState.possibleMoves[0] !== targetPosition) {
       return;
     }
 
@@ -357,52 +350,103 @@ export class App implements AfterViewInit {
   }
 
   askQuestion(category: string): void {
-    console.log(`Ask question for category: ${category}`);
-
-    // get random question from api
-    this.getRandomQuestion(category).subscribe({
-      next: (question: any) => {
+    // Try to get question from backend first, fallback to samples
+    this.http.get<any>(this.APIURL + `api/questions/random/${category}`).subscribe({
+      next: (question) => {
         this.currentQuestion = question;
-        console.log('Question fetched:', question);
-        // this is just simulating user answer, change for final
-        setTimeout(() => {
-          const correct = Math.random() > 0.5;
-          this.handleAnswer(correct);
-        }, 1500);
+        this.playerAnswer = '';
+        this.focusAnswerInput();
       },
       error: (error) => {
-        console.error('Error fetching question:', error);
-        this.handleAnswer(false);
+        console.warn('Could not load question from backend, using sample:', error);
+        // Fallback to sample questions
+        this.currentQuestion = {
+          category: category,
+          question: this.getSampleQuestion(category),
+          answer: this.getSampleAnswer(category)
+        };
+        this.playerAnswer = '';
+        this.focusAnswerInput();
       }
     });
+  }
+
+  private focusAnswerInput(): void {
+    // Focus input after modal appears
+    setTimeout(() => {
+      const input = document.querySelector('.answer-input') as HTMLInputElement;
+      if (input) input.focus();
+    }, 100);
+  }
+
+  private getSampleQuestion(category: string): string {
+    const questions: Record<string, string> = {
+      'Science': 'What is the chemical symbol for gold?',
+      'Math': 'What is 12 × 8?',
+      'English': 'Who wrote "Romeo and Juliet"?',
+      'History': 'In what year did World War II end?'
+    };
+    return questions[category] || 'What is the capital of France?';
+  }
+
+  private getSampleAnswer(category: string): string {
+    const answers: Record<string, string> = {
+      'Science': 'Au',
+      'Math': '96',
+      'English': 'William Shakespeare',
+      'History': '1945'
+    };
+    return answers[category] || 'Paris';
   }
 
   handleAnswer(correct: boolean): void {
     const currentPlayer = this.players[this.gameState.currentPlayer];
     const currentSpace = this.boardSpaces[currentPlayer.position];
+    const centerSpaceIndex = this.boardSpaces.length - 1;
+    const isInCenter = currentPlayer.position === centerSpaceIndex;
 
     if (correct) {
+      // Award chip if on wedge space and don't have this category chip yet
       if (currentSpace.isWedge && !currentPlayer.chips.includes(currentSpace.category)) {
         currentPlayer.chips.push(currentSpace.category);
       }
 
-      if (this.checkWinCondition(currentPlayer)) {
+      // Check for win condition only if in center square
+      if (isInCenter && this.checkWinCondition(currentPlayer)) {
         this.gameState.gamePhase = 'gameOver';
-        alert(`${currentPlayer.name} wins!`);
+        this.showWinMessage(currentPlayer);
         return;
       }
 
+      // Continue turn if correct answer
       this.gameState.gamePhase = 'rolling';
     } else {
+      // Wrong answer ends turn, unless in center attempting to win
+      if (isInCenter) {
+        const hasAllChips = this.selectedCategories.every(category => currentPlayer.chips.includes(category));
+        if (hasAllChips) {
+          // Failed to win - dramatic message!
+          alert(`${currentPlayer.name} had all the chips but got the final question wrong! So close to victory!`);
+        }
+      }
       this.nextPlayersTurn();
     }
 
     this.updateGameDisplay();
   }
 
+  private showWinMessage(player: Player): void {
+    alert(`🎉 ${player.name} wins Trivial Compute! 🎉\n\nYou collected all category chips and answered the final question correctly!`);
+  }
+
   checkWinCondition(player: Player): boolean {
+    // Must have chips from all selected categories
     const hasAllChips = this.selectedCategories.every(category => player.chips.includes(category));
-    const inCenter = this.boardSpaces[player.position].index === this.boardSpaces.length - 1;
+    
+    // Must be in the center square (the last space created)
+    const centerSpaceIndex = this.boardSpaces.length - 1;
+    const inCenter = player.position === centerSpaceIndex;
+    
     return hasAllChips && inCenter;
   }
 
@@ -437,22 +481,20 @@ export class App implements AfterViewInit {
       }
     });
 
-    if (this.gameState.gamePhase === 'moving') {
-      this.gameState.possibleMoves.forEach(moveIndex => {
-        const space = this.boardSpaces[moveIndex];
-        if (space) {
-          ctx.beginPath();
-          ctx.arc(space.position.x, space.position.y, 25, 0, 2 * Math.PI);
-          ctx.strokeStyle = '#ffff00';
-          ctx.lineWidth = 3;
-          ctx.stroke();
-        }
-      });
+    if (this.gameState.gamePhase === 'moving' && this.gameState.possibleMoves.length > 0) {
+      const space = this.boardSpaces[this.gameState.possibleMoves[0]];
+      if (space) {
+        ctx.beginPath();
+        ctx.arc(space.position.x, space.position.y, 25, 0, 2 * Math.PI);
+        ctx.strokeStyle = '#ffff00';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+      }
     }
   }
 
   handleCanvasClick(event: MouseEvent): void {
-    if (this.gameState.gamePhase !== 'moving') {
+    if (this.gameState.gamePhase !== 'moving' || this.gameState.possibleMoves.length === 0) {
       return;
     }
 
@@ -461,16 +503,14 @@ export class App implements AfterViewInit {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
-    for (const moveIndex of this.gameState.possibleMoves) {
-      const space = this.boardSpaces[moveIndex];
-      const distance = Math.sqrt(
-        Math.pow(x - space.position.x, 2) + Math.pow(y - space.position.y, 2)
-      );
+    const moveIndex = this.gameState.possibleMoves[0];
+    const space = this.boardSpaces[moveIndex];
+    const distance = Math.sqrt(
+      Math.pow(x - space.position.x, 2) + Math.pow(y - space.position.y, 2)
+    );
 
-      if (distance <= 25) {
-        this.playerMoveSpace(moveIndex);
-        break;
-      }
+    if (distance <= 25) {
+      this.playerMoveSpace(moveIndex);
     }
   }
 
@@ -496,11 +536,27 @@ export class App implements AfterViewInit {
   getGamePhaseText(): string {
     switch (this.gameState.gamePhase) {
       case 'rolling': return 'Roll the dice';
-      case 'moving': return `Move ${this.gameState.rollValue} spaces`;
+      case 'moving': return `Click to move ${this.gameState.rollValue} spaces`;
       case 'answering': return 'Answer the question';
       case 'gameOver': return 'Game Over';
       default: return '';
     }
+  }
+
+  // Category Management
+  loadAvailableCategories(): void {
+    // Try to load categories from backend, fallback to hardcoded if it fails
+    this.http.get<{categories: string[]}>(this.APIURL + "api/questions/categories").subscribe({
+      next: (response) => {
+        if (response.categories && response.categories.length > 0) {
+          this.CATEGORIES = response.categories;
+        }
+      },
+      error: (error) => {
+        console.warn('Could not load categories from backend, using defaults:', error);
+        // Keep the existing hardcoded categories as fallback
+      }
+    });
   }
 
   // question management functions
@@ -685,6 +741,33 @@ export class App implements AfterViewInit {
     this.editQuestionData = { category: '', question: '', answer: '' };
     this.authUsername = '';
     this.authPassword = '';
+  }
+
+  // Question Modal Methods
+  submitAnswer(): void {
+    if (!this.playerAnswer.trim()) {
+      return;
+    }
+    
+    const isCorrect = this.checkAnswer(this.playerAnswer.trim(), this.currentQuestion.answer);
+    this.closeQuestionModal();
+    this.handleAnswer(isCorrect);
+  }
+
+  skipQuestion(): void {
+    this.closeQuestionModal();
+    this.handleAnswer(false);
+  }
+
+  closeQuestionModal(): void {
+    this.currentQuestion = null;
+    this.playerAnswer = '';
+  }
+
+  private checkAnswer(userAnswer: string, correctAnswer: string): boolean {
+    // Normalize both answers for comparison
+    const normalize = (str: string) => str.toLowerCase().trim().replace(/[^\w\s]/g, '');
+    return normalize(userAnswer) === normalize(correctAnswer);
   }
 
 }
