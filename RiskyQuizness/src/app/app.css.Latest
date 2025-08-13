@@ -82,7 +82,7 @@
     margin-bottom: 10px;
     font-size: 20px;
     font-weight: bold;
-    color: #fff;
+    color: black;
   }
   
   .CategorySelection select {
@@ -120,7 +120,7 @@
   .top-left { background-color: red; }
   .top-right { background-color: green; }
   .bottom-left { background-color: blue; }
-  .bottom-right { background-color: rgb(255,216,1); }
+  .bottom-right { background-color: yellow; }
   
   .CategorySelection .next-button {
     position: absolute;
@@ -169,7 +169,7 @@
     margin-bottom: 10px;
     font-size: 20px;
     font-weight: bold;
-    color: #fff;
+    color: black;
   }
   
   .PlayerSelection input[type="text"] {
@@ -197,7 +197,7 @@
   .PlayerSelection .top-left { background-color: red; }
   .PlayerSelection .top-right { background-color: green; }
   .PlayerSelection .bottom-left { background-color: blue; }
-  .PlayerSelection .bottom-right { background-color: rgb(255,216,1); }
+  .PlayerSelection .bottom-right { background-color: yellow; }
   
   .PlayerSelection .top-left,
   .top-right,
@@ -233,7 +233,7 @@
   .GameBoard body {
     margin: 0;
     padding: 20px;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
     display: flex;
     flex-direction: column;
@@ -264,21 +264,18 @@
   .GameBoard {
     display: flex;
     gap: 20px;
-    padding: 20px; /*not this*/
+    padding: 20px;
     height: 100vh;
   }
 
- /* .GameBoard .game-canvas {
+  .GameBoard #gameCanvas {
     border: 1px solid #333;
-   padding: 200px 
-    height: 7000;
-    width: 7000;
-  }*/
+  }
 
   .GameBoard .game-canvas { /*this is where the game board is*/
     width: 70vw; /* don't change size of the game and command box */
-    height: 95vh;
-    border: 1px solid #333;
+    height: 80vh;
+    border: 2px solid #333;
     background-color: white;
     cursor: pointer;
   }
@@ -364,7 +361,7 @@
 
   .GameBoard .current-player-highlight {
     background: #ecf0f1 !important;
-    border-width: 5px !important;
+    border-width: 3px !important;
   }
 
   .GameBoard .player-name {
@@ -373,15 +370,15 @@
   }
 
   .GameBoard .player-chips {
-    font-size: 10px;
+    font-size: 14px;
   }
 
   .GameBoard .chip {
     display: inline-block;
     color: white;
     padding: 2px 6px;
-    border-radius: 2px;
-    margin: 3px;
+    border-radius: 3px;
+    margin: 2px;
     font-weight: bold;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
   }
@@ -389,26 +386,8 @@
 
 
   /* Question Editor Selection */
-  
-   .editor-selection * {
+  .editor-selection * {
     box-sizing: border-box;
-  }
-  
-  .editor-selection {
-    padding: 30px;
-    max-width: flex;
-    max-height: flex;
-    margin: 0 auto;
-    background: linear-gradient(135deg, #83a4d4, #b6fbff);
-    font-family: "Segoe UI", sans-serif;
-    min-height: 90vh;
-    color: #fff;
-  }
-
-  .editor-selection h2 {
-    font-size: 40px;
-    margin-bottom: 20px;
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
   }
   
   .editor-selection body {
@@ -431,50 +410,23 @@
     cursor: pointer;
   }
   
-  .editor-selection .create-btn {
+  .editor-selection .createNewQuestion-btn {
     background: #28a745;
   }
   
-  .editor-selection .create-btn:hover {
+  .editor-selection .createNewQuestion-btn:hover {
     background: #218838;
   }
   
-  .editor-selection .edit-btn {
+  .editor-selection .editExistingQuestion-btn {
     background: #007bff;
   }
   
-  .editor-selection .edit-btn:hover {
+  .editor-selection .editExistingQuestion-btn:hover {
     background: #0056b3;
   }
 
-  .editor-selection h3 {
-    font-size: 40px;
-    margin-bottom: 20px;
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
-  }
 
-  .questions-list p {
-    font-size: 20px;
-    margin-bottom: 10px;
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
-  }
-
-  .questions-list .create-btn{
-    background: #28a745;
-  }
-
-  .questions-list .create-btn:hover {
-    background: #218838;
-  }
-
-  .questions-list .save-btn{
-    background: #007bff;
-  }
-
-  .questions-list .edit-btn:hover{
-    background: #0056b3;
-  }
-  
 /* Make New Question  */
 
 .question-form body {
@@ -496,9 +448,8 @@
   margin-bottom: 12px;
   font-size: 30px;
   font-weight: bold;
-  color: #fff;
+  color: black;
   text-align: center;
-  margin: 30;
 }
 
 .question-form .textbox-group {
@@ -556,6 +507,9 @@
   background: #007bff;
 }
 
+.question-form .btn:hover {
+  background: #0056b3;
+}
 
 .question-form .addQuestion-btn {
   position: absolute;
@@ -577,7 +531,7 @@
 
 /* Edit Question Actual Edit */
 .question-form .save-btn {
-  background: #28a745;
+  background: #27ae60;
   color: white;
 }
 
@@ -587,25 +541,9 @@
 }
 
 .question-form .cancel-btn {
-  background:#6c757dbd;
-  color: white;
-}
-
-.question-form .save-btn:hover {
-  background: #218838;
-  color: white;
-}
-
-.question-form .delete-btn:hover {
-  background: rgba(180, 53, 39, 0.801);
-  color: white;
-}
-
-.question-form .cancel-btn:hover{
   background: #6c757d;
   color: white;
 }
-
 
 
 /*  Question Prompt */
@@ -621,10 +559,6 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-}
-
-.PlayerWinnerAlert {
- 	background: linear-gradient(135deg, #83a4d4, #b6fbff); 
 }
 
 /* Flashcard box */
@@ -661,42 +595,6 @@ button {
   cursor: pointer;
 }
 
-.categoryCard {
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  width: 300px;
-  text-align: center;
-  margin: 20px auto;
-}
-
-.categoryCard h2 {
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.button-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.button-container button {
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.button-container button:hover {
-  background-color: #0056b3;
-}
-
 .correct {
   background-color: #4caf50;
   color: white;
@@ -721,21 +619,8 @@ button {
   margin: 0 auto;
   background: linear-gradient(135deg, #83a4d4, #b6fbff);
   font-family: "Segoe UI", sans-serif;
-  min-height: 90vh;
-  color: #fff;
+  min-height: 90vh
 }
-/* .HomePage {
-  margin: 0;
-  font-family: "Segoe UI", sans-serif;
-  background: linear-gradient(135deg, #83a4d4, #b6fbff);
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  color: #fff;
-} */
 
 .QuestionManagement .management-header {
   display: flex;
@@ -744,12 +629,6 @@ button {
   margin-bottom: 30px;
   padding-bottom: 15px;
   border-bottom: 2px solid #dee2e6;
-}
-
-.QuestionManagement h1 {
-  font-size: 40px;
-  margin-bottom: 30px;
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
 }
 
 .QuestionManagement .back-btn {
@@ -764,7 +643,6 @@ button {
   border-radius: 8px;
   padding: 30px;
   margin: 20px 0;
-  color: rgb(0, 0, 0);
 }
 
 .QuestionManagement .auth-form {
@@ -803,34 +681,3 @@ button {
 
 
 /* BELLA NEED TO FIX GAME BOARD and Home Page and Questions */
-#confetti-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 9999;
-}
-
-.confetti {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background-color: red;
-  animation: fly 3s linear forwards;
-  border-radius: 50%;
-}
-
-@keyframes fly {
-  0% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-100vh) rotate(720deg);
-    opacity: 0;
-  }
-}
-
